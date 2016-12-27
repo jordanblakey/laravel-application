@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>Laravel</title>
 
@@ -80,6 +81,40 @@
             <div class="content">
                 <div class="title m-b-md">
                     Laravel
+                </div>
+                <div class="m-b-md">
+                    <p><!--[shortcode_hello]--></p>
+                    <form action="upload" id="upload" enctype="multipart/form-data">
+                        <input type="file" name="file[]" multiple>
+                        <br>
+                        <input type="submit">
+                    </form>
+                    <div id="message">
+
+                    </div>
+                    <script>
+                        var form = document.getElementById('upload');
+                        var request = new XMLHttpRequest();
+
+                        form.addEventListener('submit', function(e){
+                            e.preventDefault();
+                            var formdata = new FormData(form);
+
+                            request.open('post', '/upload');
+                            request.addEventListener("load", transferComplete);
+                            request.send(formdata);
+                        });
+
+                        function transferComplete(data){
+                            response = JSON.parse(data.currentTarget.response);
+                            if(response.success){
+                                document.getElementById('message').innerHTML = "Successfully uploaded files!";
+                            }
+                        }
+
+
+                    </script>
+                    <a href="/forums">Chatter Forums</a>
                 </div>
 
                 <div class="links">
